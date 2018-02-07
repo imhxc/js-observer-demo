@@ -78,36 +78,9 @@
          */
         let promulgator2 = {}
         installEvent(promulgator2);
-        
-        // 调用
-        // 添加订阅者
-        promulgator2.addListen('squareMater88', function(price) {
-            let obj = {
-                name: '小明',
-                price: price,
-                squaterMater: 88
-            }
-            console.log(obj);
-        }); 
-        promulgator2.addListen('squareMater100', function(price) {
-            let obj = {
-                name: '小红',
-                price: price,
-                squaterMater: 100
-            }
-            console.log(obj);
-        });
-        promulgator2.addListen('squareMater100', function(price) {
-            let obj = {
-                name: '小花',
-                price: price,
-                squaterMater: 100
-            }
-            console.log(obj);
-        });
         // 发布
-        promulgator2.trigger('squareMater88', 30000); // 给订阅了squareMater88事件的订阅者发布消息
-        promulgator2.trigger('squareMater100', 40000); // 给订阅了squareMater100事件的订阅者发布消息
+        promulgator2.trigger('squareMater88', 33000); // 给订阅了squareMater88事件的订阅者发布消息
+        promulgator2.trigger('squareMater100', 44000); // 给订阅了squareMater100事件的订阅者发布消息
     </script>
 </body>
 </html>
