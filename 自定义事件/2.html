@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+         * 
+         *
+         */
+        let promulgator = {}; // 定义发布者 
+        promulgator.clientList = []; // 缓存列表，存放订阅者的回调函数
+        // 定义listen方法, 用于添加订阅者
+        promulgator.addListen = function(key, fn) {
+            if (!this.clientList[key]) {
+                // 如果没有订阅此类消息，则给改消息创建一个缓存列表
+                this.clientList[key] = [];
+            }
+            this.clientList[key].push(fn);
+        }
+        // 定义发布消息方法
+        promulgator.trigger = function() {
+            let key = Array.prototype.shift.call(arguments); // arguments是个类数组
+            let fns = this.clientList[key]; // 取出该消息对应的毁掉函数集合，是个数组
+            if(!fns || (fns.length === 0)) { // 如果没有定义该消息，则返回
+                return false;
+            }
+
+            // 遍历当前key下的所有的订阅者
+            fns.forEach(ele => {
+                ele.apply(this, arguments); // 将订阅者的this绑定到该环境下, 否则指向不明
+            })
+        }
+
+        // 测试
+        // 添加一个只关心88平方面积的订阅者; 
+        promulgator.addListen('squareMater88', function(price) {
+            let obj = {
+                name: '小明',
+                price: price,
+                squareMater: 88
+            }
+            console.log(obj);
+        });
+        // 添加一个只关心100平方面积的订阅者
+        promulgator.addListen('squareMater100', function(price) {
+            let obj = {
+                name: '小红',
+                price: price,
+                squareMater: 100
+            }
+            console.log(obj);
+        })
+        // 添加以一个只关心100平方的订阅者
+        promulgator.addListen('squareMater100', function(price){
+            let obj = {
+                name: '小花',
+                price: price,
+                squareMater: 100
+            }
+            console.log(obj);
+        });
+
+        // 发布88平方面积的消息
+        promulgator.trigger('squareMater88', 40000);
+        // 发布100平方面积的消息
+        promulgator.trigger('squareMater100', 30000);
+    </script>
+</body>
+</html>

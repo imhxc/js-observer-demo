@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let promulgator = {}; // 定义发布者 
+        promulgator.clientList = []; // 缓存列表，存放订阅者的回调函数
+        // 定义listen方法, 用于添加订阅者
+        promulgator.addListen = function(fn) {
+            this.clientList.push(fn);
+        }
+        // 定义发布消息方法
+        promulgator.trigger = function() {
+            // 遍历当前所有的订阅者
+            this.clientList.forEach(ele => {
+                ele.apply(this, arguments); // 将订阅者的this绑定到该环境下, 否则指向不明
+            })
+        }
+
+        // 测试
+        // 添加一个订阅者; 
+        promulgator.addListen(function(price, squareMater) {
+            let obj = {
+                name: '小明',
+                price: price,
+                squareMater: squareMater
+            }
+            console.log(obj);
+        });
+        promulgator.addListen(function(price, squareMater) {
+            let obj = {
+                name: '小红',
+                price: price,
+                squareMater: squareMater
+            }
+            console.log(obj);
+        })
+        // 发布消息
+        promulgator.trigger(2000000, 88);
+    </script>
+</body>
+</html>

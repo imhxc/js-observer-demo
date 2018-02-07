@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let events = {
+            clientList: [],
+            addListen: function(key, fn) {
+                if (!this.clientList[key]) {
+                    this.clientList[key] = []
+                }
+                this.clientList[key].push(fn); // 添加订阅事件
+            },
+            trigger: function() {
+                let key = Array.prototype.shift.call(arguments);
+                let fns = this.clientList[key];
+                if (!fns || fns.length === 0) {
+                    return false; // 没有对应的回调函数
+                }
+                fns.forEach(ele => {
+                    ele.apply(this, arguments);
+                })
+            }
+        }
+
+        // 再定一个一个installEvent函数， 用于动态安装所有对象
+        let installEvent = function (obj) {
+            for(let i in events) {
+                obj[i] = events[i];
+            }
+        }
+
+        // 测试
+         /*
+         *  第一个对象发布-订阅消息
+         */
+        // 给对象promulgator1增加订阅发布功能
+        let promulgator1 = {}
+        installEvent(promulgator1);
+        
+        // 调用
+        // 添加订阅者
+        promulgator1.addListen('squareMater88', function(price) {
+            let obj = {
+                name: '小明',
+                price: price,
+                squaterMater: 88
+            }
+            console.log(obj);
+        }); 
+        promulgator1.addListen('squareMater100', function(price) {
+            let obj = {
+                name: '小红',
+                price: price,
+                squaterMater: 100
+            }
+            console.log(obj);
+        });
+        promulgator1.addListen('squareMater100', function(price) {
+            let obj = {
+                name: '小花',
+                price: price,
+                squaterMater: 100
+            }
+            console.log(obj);
+        });
+        // 发布
+        promulgator1.trigger('squareMater88', 30000); // 给订阅了squareMater88事件的订阅者发布消息
+        promulgator1.trigger('squareMater100', 40000); // 给订阅了squareMater100事件的订阅者发布消息
+
+        /*
+         *  第二个对象发布-订阅消息
+         */
+        let promulgator2 = {}
+        installEvent(promulgator2);
+        
+        // 调用
+        // 添加订阅者
+        promulgator2.addListen('squareMater88', function(price) {
+            let obj = {
+                name: '小明',
+                price: price,
+                squaterMater: 88
+            }
+            console.log(obj);
+        }); 
+        promulgator2.addListen('squareMater100', function(price) {
+            let obj = {
+                name: '小红',
+                price: price,
+                squaterMater: 100
+            }
+            console.log(obj);
+        });
+        promulgator2.addListen('squareMater100', function(price) {
+            let obj = {
+                name: '小花',
+                price: price,
+                squaterMater: 100
+            }
+            console.log(obj);
+        });
+        // 发布
+        promulgator2.trigger('squareMater88', 30000); // 给订阅了squareMater88事件的订阅者发布消息
+        promulgator2.trigger('squareMater100', 40000); // 给订阅了squareMater100事件的订阅者发布消息
+    </script>
+</body>
+</html>
